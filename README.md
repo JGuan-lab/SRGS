@@ -23,8 +23,8 @@ The SGRS() function takes as input argument a gene expression dataframe or matri
 Each row of that matrix must correspond to a sample and each column must correspond to a gene.
 The gene names must be specified in colnames(exprMatr).
 
-      data<-read.table('/data/Simulate/Without\ dropout/Size50/data/sample500/Ecoli1.txt',sep = ',')
-      net<-read.table('/data/Simulate/Without\ dropout/Size50/gold\ standards/InSilicoSize50-Ecoli1_goldstandard.tsv')
+      data<-read.table('/data/Simulate/Without dropout/Size50/data/sample500/Ecoli1.txt',sep = ',')
+      net<-read.table('/data/Simulate/Without dropout/Size50/gold standards/InSilicoSize50-Ecoli1_goldstandard.tsv')
 
       > data[1:5,1:5]
             G1        G2        G3        G4        G5
@@ -47,8 +47,8 @@ The resulting linkList matrix contains the ranking of links. Each row correspond
     
     library(SRGS)
     
-    data<-read.table('/data/Simulate/Without\ dropout/Size50/data/sample500/Ecoli1.txt',sep = ',')
-    net<-read.table('/data/Simulate/Without\ dropout/Size50/gold\ standards/InSilicoSize50-Ecoli1_goldstandard.tsv')
+    data<-read.table('/data/Simulate/Without dropout/Size50/data/sample500/Ecoli1.txt',sep = ',')
+    net<-read.table('/data/Simulate/Without dropout/Size50/gold standards/InSilicoSize50-Ecoli1_goldstandard.tsv')
     predictNetwork <- SRGS(data, FALSE, iter = 10, k = 1, stepsize = 0.01, num.cores=1)
     ###run with parallel###
     predictNetwork <- parSRGS(data, FALSE, iter = 10, k = 1, stepsize = 0.01, num.cores = 5)
@@ -72,8 +72,8 @@ The resulting linkList matrix contains the ranking of links. Each row correspond
     
     library(SRGS)
     
-    data<-read.table('/data/Simulate/With\ dropout/Size50/data/50/Ecoli1.txt',sep = ',')
-    net<-read.table('/data/Simulate/With\ dropout/Size50/gold\ standards/InSilicoSize50-Ecoli1_goldstandard.tsv')
+    data<-read.table('/data/Simulate/With dropout/Size50/data/50/Ecoli1.txt',sep = ',')
+    net<-read.table('/data/Simulate/With dropout/Size50/gold standards/InSilicoSize50-Ecoli1_goldstandard.tsv')
     set.seed(30)
     predictNetwork <- SRGS(data, TRUE, 0.6, iter = 10, k = 1, stepsize = 0.01, num.cores=1)
     ###run with parallel###
