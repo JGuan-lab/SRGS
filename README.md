@@ -1,6 +1,7 @@
 # SRGS </br> 
-## 1. Introduction  
+## 1. Introduction
 
+SRGS, SPLS (sparse partial least squares)-based recursive gene selection, can be used for gene regulatory network inference from bulk or single-cell expression data. Based on SPLS, SRGS can achieve the purpose of regression and feature selection simultaneously. SRGS recursively selects and scores the genes which may have regulations on the considered target gene. To consider the characteristic of single-cell data, we randomly scramble samples, set some expression values to zeroes, and generate multiple copies of data through multiple iterations, making SRGS more robust.
   
 ## 2. Installation
 Depends: 
@@ -19,9 +20,10 @@ Requirements:
 Run `main.R`. The parameters can be changed as below.
 
 ### 3.1 Prepare data
-The SGRS() function takes as input argument a gene expression dataframe or matrix data.
-Each row of that matrix must correspond to a sample and each column must correspond to a gene.
-The gene names must be specified in colnames(exprMatr).
+
+The SRGS() function takes a gene expression dataframe or matrix data as input.
+Each row of the matrix must correspond to a sample and each column must correspond to a gene.
+The gene names must be specified.
 
       data<-read.table('/data/Simulate/Without dropout/Size50/data/sample500/Ecoli1.txt',sep = ',')
       net<-read.table('/data/Simulate/Without dropout/Size50/gold standards/InSilicoSize50-Ecoli1_goldstandard.tsv')
@@ -43,15 +45,16 @@ The gene names must be specified in colnames(exprMatr).
       5 G4 G6  1
       
 ### 3.2.1 Run SRGS with the nodropout data
-The resulting linkList matrix contains the ranking of links. Each row corresponds to a regulatory link. The first column shows the regulator, the second column shows the target gene, and the last column indicates the weight of the link.
-    
+   
     library(SRGS)
     
     data<-read.table('/data/Simulate/Without dropout/Size50/data/sample500/Ecoli1.txt',sep = ',')
     net<-read.table('/data/Simulate/Without dropout/Size50/gold standards/InSilicoSize50-Ecoli1_goldstandard.tsv')
-    predictNetwork <- SRGS(data, FALSE, iter = 10, k = 1, stepsize = 0.01, num.cores=1)
-    ###run with parallel###
+    
+    predictNetwork <- SRGS(data, FALSE, iter = 10, k = 1, stepsize = 0.01, num.cores=1) # when SRGS is tested on a dense expression data, the parameter 'dropout' could be set as FALSE.
+    ### If one would like to run in parallel, SRGS can provide parallel computing by using the function of parSRGS instead ###
     predictNetwork <- parSRGS(data, FALSE, iter = 10, k = 1, stepsize = 0.01, num.cores = 5)
+    
     > predictNetwork[1:5,]
       regulatoryGene targetGene     weight
     1             G2         G1 0.04123711
@@ -59,8 +62,9 @@ The resulting linkList matrix contains the ranking of links. Each row correspond
     3             G4         G1 0.76288660
     4             G5         G1 0.21649485
     5             G6         G1 0.43298969
-    
-### 3.2.2 Calculate ROC 
+The result contains the links. Each row corresponds to a regulatory link. The first column shows the regulator, the second column shows the target gene, and the last column indicates the weight of the link.
+
+### 3.2.2 Calculate AUC 
 
     AUCROC<-calcROC(n,net)
     
@@ -68,16 +72,18 @@ The resulting linkList matrix contains the ranking of links. Each row correspond
     Area under the curve: 0.8051
     
 ### 3.3.1 Run SRGS with the dropout data
-The resulting linkList matrix contains the ranking of links. Each row corresponds to a regulatory link. The first column shows the regulator, the second column shows the target gene, and the last column indicates the weight of the link.
-    
+  
     library(SRGS)
     
     data<-read.table('/data/Simulate/With dropout/Size50/data/50/Ecoli1.txt',sep = ',')
     net<-read.table('/data/Simulate/With dropout/Size50/gold standards/InSilicoSize50-Ecoli1_goldstandard.tsv')
+    
     set.seed(30)
-    predictNetwork <- SRGS(data, TRUE, 0.6, iter = 10, k = 1, stepsize = 0.01, num.cores=1)
-    ###run with parallel###
+    predictNetwork <- SRGS(data, TRUE, 0.6, iter = 10, k = 1, stepsize = 0.01, num.cores=1) # when SRGS is tested on a sparse expression data, the parameter 'dropout' should be set as TRUE.
+    
+    ### If one would like to run in parallel, SRGS can provide parallel computing by using the function of parSRGS instead ###
     predictNetwork <- parSRGS(data, TRUE, iter = 10, k = 1, stepsize = 0.01, num.cores = 5)
+    
     > predictNetwork[1:5,]
       regulatoryGene targetGene     weight
     1             G2         G1 0.04123711
@@ -85,8 +91,9 @@ The resulting linkList matrix contains the ranking of links. Each row correspond
     3             G4         G1 0.76288660
     4             G5         G1 0.21649485
     5             G6         G1 0.43298969
-    
-### 3.2.2 Calculate ROC 
+The result contains the links. Each row corresponds to a regulatory link. The first column shows the regulator, the second column shows the target gene, and the last column indicates the weight of the link.   
+
+### 3.3.2 Calculate AUC 
   
     AUCROC<-calcROC(n,net)
     
