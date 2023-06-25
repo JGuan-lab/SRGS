@@ -2,6 +2,9 @@
 ## 1. Introduction
 
 SRGS, SPLS (sparse partial least squares)-based recursive gene selection, can be used for gene regulatory network inference from bulk or single-cell expression data. Based on SPLS, SRGS can achieve the purpose of regression and feature selection simultaneously. SRGS recursively selects and scores the genes which may have regulations on the considered target gene. To consider the characteristic of single-cell data, we randomly scramble samples, set some expression values to zeroes, and generate multiple copies of data through multiple iterations, making SRGS more robust.
+
+SRGS corresponds to the following paper:
+Guan, J., Wang, Y., Wang, Y. et al. SRGS: sparse partial least squares-based recursive gene selection for gene regulatory network inference. BMC Genomics 23, 782 (2022). https://doi.org/10.1186/s12864-022-09020-7
   
 ## 2. Installation
 Depends: 
